@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sarita Shop | Sistema de Reportes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg: #f8f5fb;
+  --card: #ffffff;
+  --ink: #2f2440;
+  --muted: #756b82;
+  --primary: #9c5dd6;
+  --primary-dark: #7841ad;
+  --soft: #efe3f8;
+  --danger: #c7435a;
+  --warning: #fff0c7;
+  --success: #3a9b71;
+  --border: #e5dceb;
+  --shadow: 0 14px 38px rgba(73, 45, 91, .10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Nunito", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.hidden { display: none !important; }
+
+.view { min-height: 100vh; }
+
+.auth-view {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, #ead7f8 0, transparent 35%),
+    radial-gradient(circle at bottom right, #dff5eb 0, transparent 35%),
+    var(--bg);
+}
+
+.auth-card {
+  width: min(440px, 100%);
+  background: var(--card);
+  border-radius: 28px;
+  padding: 34px;
+  box-shadow: var(--shadow);
+}
+
+.brand-badge {
+  width: 70px;
+  height: 70px;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--primary), #d58fc9);
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+.subtitle { color: var(--muted); }
+
+label {
+  display: block;
+  font-weight: 800;
+  margin: 14px 0 7px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font: inherit;
+  background: white;
+  color: var(--ink);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 3px solid rgba(156, 93, 214, .15);
+  border-color: var(--primary);
+}
+
+.btn {
+  border: 0;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.btn.primary { background: var(--primary); color: white; }
+.btn.primary:hover { background: var(--primary-dark); }
+.btn.danger { background: var(--danger); color: white; }
+.btn.success { background: var(--success); color: white; }
+.btn.soft { background: var(--soft); color: var(--primary-dark); }
+.btn.ghost { background: transparent; border: 1px solid var(--border); }
+.btn.full { width: 100%; margin-top: 20px; }
+
+.demo-note {
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #f6effb;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.topbar {
+  height: 76px;
+  padding: 12px 24px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar h2 { margin-bottom: 2px; }
+.topbar span { color: var(--muted); font-size: 14px; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  min-height: calc(100vh - 76px);
+}
+
+.sidebar {
+  background: white;
+  border-right: 1px solid var(--border);
+  padding: 18px;
+}
+
+.nav-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 13px 15px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.nav-btn.active {
+  background: var(--soft);
+  color: var(--primary-dark);
+}
+
+.content { padding: 26px; max-width: 1400px; width: 100%; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.page-header p { color: var(--muted); margin-bottom: 0; }
+
+.panel, .report-card, .group-card, .balance-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(73, 45, 91, .05);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 18px;
+}
+
+.full-span { grid-column: 1 / -1; }
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 10px;
+}
+
+.profile-chip {
+  border: 1px solid var(--border);
+  background: white;
+  padding: 12px;
+  border-radius: 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.profile-chip.selected {
+  color: white;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.warning-box {
+  background: var(--warning);
+  border: 1px solid #e8cd7b;
+  padding: 15px;
+  border-radius: 14px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  padding: 18px;
+}
+
+.stat-card strong {
+  display: block;
+  font-size: 30px;
+  color: var(--primary-dark);
+}
+
+.stat-card span { color: var(--muted); }
+
+.cards-list {
+  display: grid;
+  gap: 14px;
+}
+
+.report-card, .group-card, .balance-card {
+  display: grid;
+  gap: 10px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  background: var(--soft);
+  color: var(--primary-dark);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.search { max-width: 380px; }
+
+.empty {
+  padding: 28px;
+  text-align: center;
+  background: white;
+  border: 1px dashed var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+}
+
+dialog {
+  border: 0;
+  border-radius: 22px;
+  width: min(650px, calc(100% - 28px));
+  padding: 0;
+  box-shadow: var(--shadow);
+}
+
+dialog::backdrop { background: rgba(26, 18, 34, .55); }
+
+.modal-card { padding: 24px; position: relative; }
+
+.modal-close {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.result-box {
+  margin-top: 16px;
+  background: #f5f0f8;
+  border-radius: 16px;
+  padding: 16px;
+  line-height: 1.7;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #fafafa;
+}
+
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #2f2440;
+  color: white;
+  padding: 13px 16px;
+  border-radius: 14px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: .25s;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.toast.show { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-btn { min-width: 150px; margin-bottom: 0; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 620px) {
+  .content { padding: 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .full-span { grid-column: auto; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .page-header { align-items: stretch; flex-direction: column; }
+  .search { max-width: none; }
+}
+
+</style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <section id="loginView" class="view auth-view">
+    <div class="auth-card">
+      <div class="brand-badge">SS</div>
+      <h1>Sarita Shop</h1>
+      <p class="subtitle">Sistema de reportes, reposiciones y saldos</p>
+
+      <label>Nombre o correo</label>
+      <input id="loginName" type="text" placeholder="Ej. Ana Pérez" />
+
+      <label>Tipo de acceso</label>
+      <select id="loginRole">
+        <option value="cliente">Cliente</option>
+        <option value="admin">Administradora</option>
+      </select>
+
+      <button id="loginBtn" class="btn primary full">Ingresar</button>
+
+      <div class="demo-note">
+        <strong>Modo demostración:</strong> esta versión guarda la información en este dispositivo.
+      </div>
+    </div>
+  </section>
+
+  <section id="appView" class="view hidden">
+    <header class="topbar">
+      <div>
+        <h2>Sarita Shop</h2>
+        <span id="sessionLabel"></span>
+      </div>
+      <button id="logoutBtn" class="btn ghost">Cerrar sesión</button>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <button class="nav-btn active" data-page="dashboard">Inicio</button>
+        <button class="nav-btn client-only" data-page="newReport">Crear reporte</button>
+        <button class="nav-btn" data-page="reports">Reportes</button>
+        <button class="nav-btn admin-only" data-page="replacements">Reposiciones</button>
+        <button class="nav-btn admin-only" data-page="balances">Saldos</button>
+        <button class="nav-btn admin-only" data-page="settings">Configuración</button>
+      </aside>
+
+      <section class="content">
+        <div id="dashboardPage" class="page">
+          <div class="page-header">
+            <div>
+              <h1>Panel principal</h1>
+              <p>Consulta el estado general de tus reportes.</p>
+            </div>
+          </div>
+
+          <div id="statsGrid" class="stats-grid"></div>
+
+          <div class="panel">
+            <h3>Actividad reciente</h3>
+            <div id="recentActivity"></div>
+          </div>
+        </div>
+
+        <div id="newReportPage" class="page hidden">
+          <div class="page-header">
+            <div>
+              <h1>Crear reporte</h1>
+              <p>Completa todos los datos. La información incompleta no podrá enviarse.</p>
+            </div>
+          </div>
+
+          <form id="reportForm" class="panel form-grid">
+            <div>
+              <label>Plataforma *</label>
+              <select id="platform" required></select>
+            </div>
+
+            <div>
+              <label>Tipo de compra *</label>
+              <select id="serviceType" required>
+                <option value="">Selecciona</option>
+                <option value="completa">Cuenta completa</option>
+                <option value="perfil">Perfil</option>
+              </select>
+            </div>
+
+            <div id="profileArea" class="full-span hidden">
+              <label>Selecciona uno o varios perfiles *</label>
+              <div id="profileButtons" class="profile-grid"></div>
+              <small>Puedes seleccionar varios perfiles. La administradora verificará la compra.</small>
+            </div>
+
+            <div>
+              <label>Correo de la cuenta *</label>
+              <input id="accountEmail" type="email" required placeholder="correo@ejemplo.com" />
+            </div>
+
+            <div>
+              <label>Duración comprada *</label>
+              <select id="purchaseDuration" required>
+                <option value="">Selecciona</option>
+                <option value="1m">1 mes</option>
+                <option value="3m">3 meses</option>
+                <option value="1y">1 año</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Fecha de entrega *</label>
+              <input id="deliveryDate" type="date" required />
+            </div>
+
+            <div>
+              <label>Fecha de la falla *</label>
+              <input id="failureDate" type="date" required />
+            </div>
+
+            <div class="full-span">
+              <label>Problema presentado *</label>
+              <select id="problemType" required></select>
+            </div>
+
+            <div id="blockedProblemMessage" class="warning-box full-span hidden"></div>
+
+            <div id="otherProblemArea" class="full-span hidden">
+              <label>Describe el problema *</label>
+              <textarea id="problemDescription" rows="4" placeholder="Explica con claridad qué ocurre"></textarea>
+            </div>
+
+            <div>
+              <label>Captura de la falla *</label>
+              <input id="failureImage" type="file" accept="image/*" required />
+            </div>
+
+            <div>
+              <label>Captura de quién entregó *</label>
+              <input id="deliveryImage" type="file" accept="image/*" required />
+            </div>
+
+            <div class="full-span">
+              <label>Observaciones adicionales</label>
+              <textarea id="extraNotes" rows="3" placeholder="Información opcional"></textarea>
+            </div>
+
+            <div class="full-span">
+              <button id="submitReportBtn" class="btn primary" type="submit">Enviar reporte</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="reportsPage" class="page hidden">
+          <div class="page-header">
+            <div>
+              <h1>Reportes</h1>
+              <p>Consulta, revisa y resuelve los reportes.</p>
+            </div>
+            <input id="reportSearch" class="search" type="search" placeholder="Buscar por correo, cliente o plataforma" />
+          </div>
+          <div id="reportsList" class="cards-list"></div>
+        </div>
+
+        <div id="replacementsPage" class="page hidden">
+          <div class="page-header">
+            <div>
+              <h1>Reposiciones</h1>
+              <p>Agrupa reportes por correo y envía nuevos datos conservando los perfiles.</p>
+            </div>
+          </div>
+          <div id="replacementGroups" class="cards-list"></div>
+        </div>
+
+        <div id="balancesPage" class="page hidden">
+          <div class="page-header">
+            <div>
+              <h1>Saldos a favor</h1>
+              <p>Historial de saldos calculados y enviados.</p>
+            </div>
+          </div>
+          <div id="balancesList" class="cards-list"></div>
+        </div>
+
+        <div id="settingsPage" class="page hidden">
+          <div class="page-header">
+            <div>
+              <h1>Configuración</h1>
+              <p>Personaliza mensajes y enlace del grupo de códigos.</p>
+            </div>
+          </div>
+
+          <div class="panel form-grid">
+            <div class="full-span">
+              <label>Enlace del grupo de códigos</label>
+              <input id="codesGroupLink" type="url" placeholder="https://..." />
+            </div>
+
+            <div class="full-span">
+              <label>Mensaje para problemas que no son reportes</label>
+              <textarea id="blockedMessageSetting" rows="4"></textarea>
+            </div>
+
+            <div class="full-span">
+              <button id="saveSettingsBtn" class="btn primary">Guardar configuración</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </section>
+
+  <dialog id="reviewDialog">
+    <form method="dialog" class="modal-card">
+      <button class="modal-close" value="cancel">×</button>
+      <h2>Revisar reporte</h2>
+      <div id="reviewContent"></div>
+      <div id="adminActions" class="action-row"></div>
+    </form>
+  </dialog>
+
+  <dialog id="replacementDialog">
+    <form method="dialog" class="modal-card">
+      <button class="modal-close" value="cancel">×</button>
+      <h2>Enviar reposición</h2>
+      <input id="replacementGroupKey" type="hidden" />
+
+      <label>Nuevo correo</label>
+      <input id="newReplacementEmail" type="email" required />
+
+      <label>Nueva contraseña</label>
+      <input id="newReplacementPassword" type="text" required />
+
+      <label>Instrucciones u observaciones</label>
+      <textarea id="replacementNotes" rows="3"></textarea>
+
+      <button id="sendReplacementBtn" class="btn primary" type="button">Enviar reposiciones</button>
+    </form>
+  </dialog>
+
+  <dialog id="balanceDialog">
+    <form method="dialog" class="modal-card">
+      <button class="modal-close" value="cancel">×</button>
+      <h2>Calcular saldo a favor</h2>
+      <input id="balanceReportId" type="hidden" />
+
+      <label>Costo pagado por el cliente</label>
+      <input id="paidAmount" type="number" min="0" step="0.01" required />
+
+      <div id="balancePreview" class="result-box">Ingresa el costo para calcular.</div>
+
+      <button id="confirmBalanceBtn" class="btn primary" type="button">Confirmar y enviar saldo</button>
+    </form>
+  </dialog>
+
+  <script>
+const platforms = [
+  { name: "Netflix", profiles: 5 },
+  { name: "Disney+", profiles: 7 },
+  { name: "Max", profiles: 5 },
+  { name: "Prime Video", profiles: 6 },
+  { name: "Paramount+", profiles: 6 },
+  { name: "ChatGPT", profiles: 10 },
+  { name: "Vix", profiles: 5 },
+  { name: "Fox One", profiles: 5 },
+  { name: "Mag", profiles: 5 },
+  { name: "Crunchyroll", profiles: 5 },
+  { name: "Apple TV", profiles: 5 },
+  { name: "Spotify", profiles: 5 },
+  { name: "YouTube", profiles: 5 },
+  { name: "Duolingo", profiles: 5 },
+  { name: "IPTV", profiles: 5 },
+  { name: "Viki", profiles: 5 },
+  { name: "Rakuten", profiles: 5 },
+  { name: "Platino", profiles: 5 }
+];
+
+const problems = [
+  "Sin suscripción",
+  "Cuenta bloqueada",
+  "Cuenta cerrada",
+  "Perfil eliminado",
+  "Cuenta suspendida",
+  "No permite iniciar sesión",
+  "Contraseña incorrecta",
+  "Demasiados dispositivos",
+  "Solicitud de código",
+  "Código de acceso",
+  "Código de hogar",
+  "Actualización de hogar",
+  "Otro"
+];
+
+const codeOnlyPlatforms = ["Vix", "Fox One", "Netflix", "Mag", "Disney+"];
+const blockedProblems = [
+  "Contraseña incorrecta",
+  "Demasiados dispositivos",
+  "Solicitud de código",
+  "Código de acceso",
+  "Código de hogar",
+  "Actualización de hogar"
+];
+
+const state = {
+  session: null,
+  selectedProfiles: [],
+  reports: JSON.parse(localStorage.getItem("sarita_reports") || "[]"),
+  balances: JSON.parse(localStorage.getItem("sarita_balances") || "[]"),
+  settings: JSON.parse(localStorage.getItem("sarita_settings") || JSON.stringify({
+    codesGroupLink: "",
+    blockedMessage: "Este problema no se atiende mediante reportes. Solicita el código, contraseña o actualización correspondiente en el grupo de códigos."
+  }))
+};
+
+const $ = (id) => document.getElementById(id);
+
+function save() {
+  localStorage.setItem("sarita_reports", JSON.stringify(state.reports));
+  localStorage.setItem("sarita_balances", JSON.stringify(state.balances));
+  localStorage.setItem("sarita_settings", JSON.stringify(state.settings));
+}
+
+function toast(message) {
+  const el = $("toast");
+  el.textContent = message;
+  el.classList.add("show");
+  setTimeout(() => el.classList.remove("show"), 2400);
+}
+
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "—";
+  return new Date(dateString + "T12:00:00").toLocaleDateString("es-MX");
+}
+
+function formatMoney(value) {
+  return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(value || 0);
+}
+
+function initSelectors() {
+  $("platform").innerHTML = `<option value="">Selecciona</option>` +
+    platforms.map(p => `<option value="${p.name}">${p.name}</option>`).join("");
+
+  $("problemType").innerHTML = `<option value="">Selecciona</option>` +
+    problems.map(p => `<option value="${p}">${p}</option>`).join("");
+}
+
+function buildProfiles() {
+  const platform = platforms.find(p => p.name === $("platform").value);
+  const isProfile = $("serviceType").value === "perfil";
+  state.selectedProfiles = [];
+  $("profileButtons").innerHTML = "";
+
+  if (!platform || !isProfile) {
+    $("profileArea").classList.add("hidden");
+    return;
+  }
+
+  $("profileArea").classList.remove("hidden");
+  for (let i = 1; i <= platform.profiles; i++) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "profile-chip";
+    button.textContent = `Perfil ${i}`;
+    button.onclick = () => {
+      if (state.selectedProfiles.includes(i)) {
+        state.selectedProfiles = state.selectedProfiles.filter(n => n !== i);
+        button.classList.remove("selected");
+      } else {
+        state.selectedProfiles.push(i);
+        state.selectedProfiles.sort((a, b) => a - b);
+        button.classList.add("selected");
+      }
+    };
+    $("profileButtons").appendChild(button);
+  }
+}
+
+function validateProblem() {
+  const platform = $("platform").value;
+  const problem = $("problemType").value;
+  const blocked = codeOnlyPlatforms.includes(platform) && blockedProblems.includes(problem);
+
+  $("blockedProblemMessage").classList.toggle("hidden", !blocked);
+  $("otherProblemArea").classList.toggle("hidden", problem !== "Otro");
+
+  if (blocked) {
+    const link = state.settings.codesGroupLink
+      ? `<br><a href="${state.settings.codesGroupLink}" target="_blank">Ir al grupo de códigos</a>`
+      : "";
+    $("blockedProblemMessage").innerHTML = `${state.settings.blockedMessage}${link}`;
+  }
+
+  $("submitReportBtn").disabled = blocked;
+  $("submitReportBtn").style.opacity = blocked ? ".55" : "1";
+}
+
+function login() {
+  const name = $("loginName").value.trim();
+  const role = $("loginRole").value;
+  if (!name) return toast("Escribe tu nombre o correo.");
+
+  state.session = { name, role };
+  $("loginView").classList.add("hidden");
+  $("appView").classList.remove("hidden");
+  $("sessionLabel").textContent = `${name} · ${role === "admin" ? "Administradora" : "Cliente"}`;
+
+  document.querySelectorAll(".admin-only").forEach(el => el.classList.toggle("hidden", role !== "admin"));
+  document.querySelectorAll(".client-only").forEach(el => el.classList.toggle("hidden", role !== "cliente"));
+
+  navigate("dashboard");
+  renderAll();
+}
+
+function logout() {
+  state.session = null;
+  $("appView").classList.add("hidden");
+  $("loginView").classList.remove("hidden");
+}
+
+function navigate(page) {
+  document.querySelectorAll(".page").forEach(el => el.classList.add("hidden"));
+  document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
+  const pageEl = $(`${page}Page`);
+  if (pageEl) pageEl.classList.remove("hidden");
+  document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
+  renderAll();
+}
+
+async function submitReport(event) {
+  event.preventDefault();
+
+  if ($("serviceType").value === "perfil" && state.selectedProfiles.length === 0) {
+    return toast("Selecciona por lo menos un perfil.");
+  }
+
+  if (new Date($("failureDate").value) < new Date($("deliveryDate").value)) {
+    return toast("La fecha de falla no puede ser anterior a la entrega.");
+  }
+
+  const duplicate = state.reports.some(r =>
+    r.status !== "Rechazado" &&
+    r.status !== "Resuelto" &&
+    r.accountEmail.toLowerCase() === $("accountEmail").value.trim().toLowerCase() &&
+    r.platform === $("platform").value &&
+    JSON.stringify(r.profiles) === JSON.stringify(state.selectedProfiles)
+  );
+
+  if (duplicate) return toast("Ya existe un reporte pendiente para esa cuenta y perfil.");
+
+  const failureFile = $("failureImage").files[0];
+  const deliveryFile = $("deliveryImage").files[0];
+  if (!failureFile || !deliveryFile) return toast("Adjunta las dos evidencias.");
+
+  const report = {
+    id: crypto.randomUUID(),
+    customer: state.session.name,
+    platform: $("platform").value,
+    serviceType: $("serviceType").value,
+    profiles: [...state.selectedProfiles],
+    accountEmail: $("accountEmail").value.trim(),
+    purchaseDuration: $("purchaseDuration").value,
+    deliveryDate: $("deliveryDate").value,
+    failureDate: $("failureDate").value,
+    problemType: $("problemType").value,
+    problemDescription: $("problemDescription").value.trim(),
+    extraNotes: $("extraNotes").value.trim(),
+    failureImage: await fileToDataUrl(failureFile),
+    deliveryImage: await fileToDataUrl(deliveryFile),
+    status: "Pendiente",
+    createdAt: new Date().toISOString(),
+    resolution: null,
+    adminMessage: ""
+  };
+
+  state.reports.unshift(report);
+  save();
+  event.target.reset();
+  state.selectedProfiles = [];
+  buildProfiles();
+  validateProblem();
+  toast("Reporte enviado correctamente.");
+  navigate("reports");
+}
+
+function visibleReports() {
+  if (!state.session) return [];
+  return state.session.role === "admin"
+    ? state.reports
+    : state.reports.filter(r => r.customer === state.session.name);
+}
+
+function renderReports() {
+  const query = $("reportSearch").value.toLowerCase().trim();
+  const reports = visibleReports().filter(r =>
+    [r.customer, r.platform, r.accountEmail, r.problemType, r.status]
+      .join(" ").toLowerCase().includes(query)
+  );
+
+  if (!reports.length) {
+    $("reportsList").innerHTML = `<div class="empty">No hay reportes para mostrar.</div>`;
+    return;
+  }
+
+  $("reportsList").innerHTML = reports.map(r => `
+    <article class="report-card">
+      <div class="card-top">
+        <div>
+          <h3>${r.platform} · ${r.serviceType === "perfil" ? `Perfil(es) ${r.profiles.join(", ")}` : "Cuenta completa"}</h3>
+          <div class="meta">
+            <span>${r.accountEmail}</span>
+            <span>${r.customer}</span>
+            <span>${formatDate(r.createdAt.slice(0,10))}</span>
+          </div>
+        </div>
+        <span class="badge">${r.status}</span>
+      </div>
+      <p><strong>Problema:</strong> ${r.problemType}</p>
+      ${r.adminMessage ? `<p><strong>Respuesta:</strong> ${r.adminMessage}</p>` : ""}
+      ${r.resolution ? `<div class="result-box">${renderResolution(r.resolution)}</div>` : ""}
+      <div class="action-row">
+        <button class="btn soft" onclick="openReview('${r.id}')">Ver detalles</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function renderResolution(resolution) {
+  if (resolution.type === "replacement") {
+    return `<strong>Reposición entregada</strong><br>
+      Correo: ${resolution.email}<br>
+      Contraseña: ${resolution.password}<br>
+      Perfil(es): ${resolution.profiles?.join(", ") || "Cuenta completa"}<br>
+      ${resolution.notes || ""}`;
+  }
+  if (resolution.type === "balance") {
+    return `<strong>Saldo otorgado:</strong> ${formatMoney(resolution.amount)}`;
+  }
+  return "";
+}
+
+function openReview(id) {
+  const r = state.reports.find(x => x.id === id);
+  if (!r) return;
+
+  $("reviewContent").innerHTML = `
+    <p><strong>Cliente:</strong> ${r.customer}</p>
+    <p><strong>Plataforma:</strong> ${r.platform}</p>
+    <p><strong>Tipo:</strong> ${r.serviceType === "perfil" ? `Perfil(es) ${r.profiles.join(", ")}` : "Cuenta completa"}</p>
+    <p><strong>Correo:</strong> ${r.accountEmail}</p>
+    <p><strong>Entrega:</strong> ${formatDate(r.deliveryDate)}</p>
+    <p><strong>Falla:</strong> ${formatDate(r.failureDate)}</p>
+    <p><strong>Duración:</strong> ${labelDuration(r.purchaseDuration)}</p>
+    <p><strong>Problema:</strong> ${r.problemType}</p>
+    <p><strong>Descripción:</strong> ${r.problemDescription || "Sin descripción adicional"}</p>
+    <p><strong>Captura de falla:</strong></p>
+    <img class="image-preview" src="${r.failureImage}" alt="Captura de la falla">
+    <p><strong>Captura de entrega:</strong></p>
+    <img class="image-preview" src="${r.deliveryImage}" alt="Captura de entrega">
+  `;
+
+  if (state.session.role === "admin") {
+    $("adminActions").innerHTML = `
+      <button type="button" class="btn success" onclick="approveReport('${r.id}')">Aprobar</button>
+      <button type="button" class="btn danger" onclick="rejectReport('${r.id}')">Rechazar</button>
+      <button type="button" class="btn soft" onclick="openSingleReplacement('${r.id}')">Dar reposición</button>
+      <button type="button" class="btn soft" onclick="openBalance('${r.id}')">Dar saldo</button>
+    `;
+  } else {
+    $("adminActions").innerHTML = "";
+  }
+
+  $("reviewDialog").showModal();
+}
+
+function approveReport(id) {
+  const r = state.reports.find(x => x.id === id);
+  r.status = "Aprobado";
+  r.adminMessage = "Tu reporte fue aprobado y está en espera de solución.";
+  save();
+  $("reviewDialog").close();
+  renderAll();
+  toast("Reporte aprobado.");
+}
+
+function rejectReport(id) {
+  const reasons = [
+    "Contraseña incorrecta",
+    "Solicitud de código",
+    "Reporte duplicado",
+    "Información incompleta",
+    "Correo incorrecto",
+    "Perfil incorrecto",
+    "No se adjuntó evidencia",
+    "La falla no corresponde a un reporte",
+    "La garantía ya terminó",
+    "Reporte enviado incorrectamente"
+  ];
+
+  const reason = prompt(`Motivo del rechazo:\n\n${reasons.map((r, i) => `${i + 1}. ${r}`).join("\n")}\n\nEscribe el número o el motivo.`);
+  if (!reason) return;
+
+  const numeric = Number(reason);
+  const selectedReason = Number.isInteger(numeric) && reasons[numeric - 1] ? reasons[numeric - 1] : reason;
+
+  const r = state.reports.find(x => x.id === id);
+  r.status = "Rechazado";
+  r.adminMessage = `Tu reporte fue rechazado. Motivo: ${selectedReason}.`;
+  save();
+  $("reviewDialog").close();
+  renderAll();
+  toast("Reporte rechazado.");
+}
+
+function labelDuration(value) {
+  return ({ "1m": "1 mes", "3m": "3 meses", "1y": "1 año" })[value] || value;
+}
+
+function groupPendingReports() {
+  const groups = {};
+  state.reports
+    .filter(r => !["Rechazado", "Resuelto", "Reposición enviada", "Saldo otorgado"].includes(r.status))
+    .forEach(r => {
+      const key = `${r.platform}__${r.accountEmail.toLowerCase()}`;
+      groups[key] ??= { key, platform: r.platform, accountEmail: r.accountEmail, reports: [] };
+      groups[key].reports.push(r);
+    });
+  return Object.values(groups);
+}
+
+function renderReplacementGroups() {
+  const groups = groupPendingReports();
+  if (!groups.length) {
+    $("replacementGroups").innerHTML = `<div class="empty">No hay cuentas pendientes de reposición.</div>`;
+    return;
+  }
+
+  $("replacementGroups").innerHTML = groups.map(g => `
+    <article class="group-card">
+      <div class="card-top">
+        <div>
+          <h3>${g.platform}</h3>
+          <p>${g.accountEmail}</p>
+        </div>
+        <span class="badge">${g.reports.length} reporte(s)</span>
+      </div>
+      <div class="meta">
+        ${g.reports.map(r => `<span>${r.customer}: ${r.serviceType === "perfil" ? `perfil(es) ${r.profiles.join(", ")}` : "completa"}</span>`).join("")}
+      </div>
+      <div class="action-row">
+        <button class="btn primary" onclick="openGroupReplacement('${g.key}')">Enviar reposiciones</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function openGroupReplacement(key) {
+  $("replacementGroupKey").value = key;
+  $("newReplacementEmail").value = "";
+  $("newReplacementPassword").value = "";
+  $("replacementNotes").value = "";
+  $("replacementDialog").showModal();
+}
+
+function openSingleReplacement(reportId) {
+  $("reviewDialog").close();
+  $("replacementGroupKey").value = `single__${reportId}`;
+  $("newReplacementEmail").value = "";
+  $("newReplacementPassword").value = "";
+  $("replacementNotes").value = "";
+  $("replacementDialog").showModal();
+}
+
+function sendReplacement() {
+  const key = $("replacementGroupKey").value;
+  const email = $("newReplacementEmail").value.trim();
+  const password = $("newReplacementPassword").value.trim();
+  const notes = $("replacementNotes").value.trim();
+
+  if (!email || !password) return toast("Escribe el nuevo correo y contraseña.");
+
+  let targets = [];
+  if (key.startsWith("single__")) {
+    const id = key.replace("single__", "");
+    const r = state.reports.find(x => x.id === id);
+    if (r) targets = [r];
+  } else {
+    const group = groupPendingReports().find(g => g.key === key);
+    targets = group?.reports || [];
+  }
+
+  targets.forEach(r => {
+    r.status = "Reposición enviada";
+    r.adminMessage = "Tu reposición fue entregada.";
+    r.resolution = {
+      type: "replacement",
+      email,
+      password,
+      profiles: r.serviceType === "perfil" ? [...r.profiles] : [],
+      notes,
+      sentAt: new Date().toISOString()
+    };
+  });
+
+  save();
+  $("replacementDialog").close();
+  renderAll();
+  toast(`Se enviaron ${targets.length} reposición(es).`);
+}
+
+function guaranteeDays(duration) {
+  return ({ "1m": 25, "3m": 60, "1y": 180 })[duration] || 0;
+}
+
+function daysBetween(start, end) {
+  const a = new Date(start + "T12:00:00");
+  const b = new Date(end + "T12:00:00");
+  return Math.max(0, Math.floor((b - a) / 86400000));
+}
+
+function calculateBalance(report, paidAmount) {
+  const totalDays = guaranteeDays(report.purchaseDuration);
+  const usedDays = daysBetween(report.deliveryDate, report.failureDate);
+  const remainingDays = Math.max(0, totalDays - usedDays);
+  const amount = totalDays ? (paidAmount / totalDays) * remainingDays : 0;
+  return { totalDays, usedDays, remainingDays, amount: Math.round(amount * 100) / 100 };
+}
+
+function openBalance(id) {
+  $("reviewDialog").close();
+  $("balanceReportId").value = id;
+  $("paidAmount").value = "";
+  $("balancePreview").textContent = "Ingresa el costo para calcular.";
+  $("balanceDialog").showModal();
+}
+
+function updateBalancePreview() {
+  const report = state.reports.find(r => r.id === $("balanceReportId").value);
+  const paid = Number($("paidAmount").value);
+  if (!report || !paid) {
+    $("balancePreview").textContent = "Ingresa el costo para calcular.";
+    return;
+  }
+
+  const result = calculateBalance(report, paid);
+  $("balancePreview").innerHTML = `
+    Garantía total: <strong>${result.totalDays} días</strong><br>
+    Días utilizados: <strong>${result.usedDays}</strong><br>
+    Días restantes: <strong>${result.remainingDays}</strong><br>
+    Saldo calculado: <strong>${formatMoney(result.amount)}</strong>
+  `;
+}
+
+function confirmBalance() {
+  const report = state.reports.find(r => r.id === $("balanceReportId").value);
+  const paid = Number($("paidAmount").value);
+  if (!report || !paid) return toast("Ingresa un costo válido.");
+
+  const result = calculateBalance(report, paid);
+  const balance = {
+    id: crypto.randomUUID(),
+    reportId: report.id,
+    customer: report.customer,
+    platform: report.platform,
+    accountEmail: report.accountEmail,
+    paidAmount: paid,
+    amount: result.amount,
+    totalDays: result.totalDays,
+    usedDays: result.usedDays,
+    remainingDays: result.remainingDays,
+    createdAt: new Date().toISOString()
+  };
+
+  state.balances.unshift(balance);
+  report.status = "Saldo otorgado";
+  report.adminMessage = `Se otorgó un saldo a favor de ${formatMoney(result.amount)}.`;
+  report.resolution = { type: "balance", amount: result.amount, sentAt: new Date().toISOString() };
+
+  save();
+  $("balanceDialog").close();
+  renderAll();
+  toast("Saldo calculado y enviado.");
+}
+
+function renderBalances() {
+  if (!state.balances.length) {
+    $("balancesList").innerHTML = `<div class="empty">Todavía no hay saldos registrados.</div>`;
+    return;
+  }
+
+  $("balancesList").innerHTML = state.balances.map(b => `
+    <article class="balance-card">
+      <div class="card-top">
+        <div>
+          <h3>${b.customer} · ${b.platform}</h3>
+          <div class="meta">
+            <span>${b.accountEmail}</span>
+            <span>${formatDate(b.createdAt.slice(0, 10))}</span>
+          </div>
+        </div>
+        <span class="badge">${formatMoney(b.amount)}</span>
+      </div>
+      <p>Pagó ${formatMoney(b.paidAmount)} · ${b.remainingDays} días restantes de ${b.totalDays}</p>
+    </article>
+  `).join("");
+}
+
+function renderDashboard() {
+  const reports = visibleReports();
+  const counts = {
+    total: reports.length,
+    pending: reports.filter(r => ["Pendiente", "Aprobado"].includes(r.status)).length,
+    replacements: reports.filter(r => r.status === "Reposición enviada").length,
+    balances: reports.filter(r => r.status === "Saldo otorgado").length
+  };
+
+  $("statsGrid").innerHTML = `
+    <div class="stat-card"><strong>${counts.total}</strong><span>Reportes totales</span></div>
+    <div class="stat-card"><strong>${counts.pending}</strong><span>Pendientes</span></div>
+    <div class="stat-card"><strong>${counts.replacements}</strong><span>Reposiciones</span></div>
+    <div class="stat-card"><strong>${counts.balances}</strong><span>Saldos otorgados</span></div>
+  `;
+
+  $("recentActivity").innerHTML = reports.slice(0, 5).map(r =>
+    `<p><strong>${r.platform}</strong> · ${r.accountEmail} · <span class="badge">${r.status}</span></p>`
+  ).join("") || `<div class="empty">Sin actividad reciente.</div>`;
+}
+
+function loadSettings() {
+  $("codesGroupLink").value = state.settings.codesGroupLink || "";
+  $("blockedMessageSetting").value = state.settings.blockedMessage || "";
+}
+
+function saveSettings() {
+  state.settings.codesGroupLink = $("codesGroupLink").value.trim();
+  state.settings.blockedMessage = $("blockedMessageSetting").value.trim();
+  save();
+  validateProblem();
+  toast("Configuración guardada.");
+}
+
+function renderAll() {
+  if (!state.session) return;
+  renderDashboard();
+  renderReports();
+  renderReplacementGroups();
+  renderBalances();
+  loadSettings();
+}
+
+window.openReview = openReview;
+window.approveReport = approveReport;
+window.rejectReport = rejectReport;
+window.openGroupReplacement = openGroupReplacement;
+window.openSingleReplacement = openSingleReplacement;
+window.openBalance = openBalance;
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSelectors();
+
+  $("loginBtn").addEventListener("click", login);
+  $("logoutBtn").addEventListener("click", logout);
+
+  document.querySelectorAll(".nav-btn").forEach(btn =>
+    btn.addEventListener("click", () => navigate(btn.dataset.page))
+  );
+
+  $("platform").addEventListener("change", () => {
+    buildProfiles();
+    validateProblem();
+  });
+  $("serviceType").addEventListener("change", buildProfiles);
+  $("problemType").addEventListener("change", validateProblem);
+  $("reportForm").addEventListener("submit", submitReport);
+  $("reportSearch").addEventListener("input", renderReports);
+  $("sendReplacementBtn").addEventListener("click", sendReplacement);
+  $("paidAmount").addEventListener("input", updateBalancePreview);
+  $("confirmBalanceBtn").addEventListener("click", confirmBalance);
+  $("saveSettingsBtn").addEventListener("click", saveSettings);
+});
+
+</script>
+</body>
+</html>
